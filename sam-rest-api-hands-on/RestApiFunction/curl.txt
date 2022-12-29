@@ -1,0 +1,4 @@
+curl -i \
+-X POST https://l19hi1qa27.execute-api.us-east-1.amazonaws.com/Prod/users/ \
+-H "Content-Type: application/json" \
+-d '{"firstName": "Te", "lastName": "st"}'
