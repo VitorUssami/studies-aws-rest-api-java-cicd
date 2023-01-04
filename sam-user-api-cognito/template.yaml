@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-user-api-cognito
+
+  Sample SAM Template for sam-user-api-cognito
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 20
+    Runtime: java11
+    Architectures:
+      - x86_64
+    MemorySize: 512
+    Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+      Variables:
+        MY_COGNITO_POLL_APP_CLIENT_ID: AQICAHifTfevelWnPyDfe3rrWeUpP15m6kUdEMTbV/EwqQL7YwGfzjJn1geCltUT3StlNZ76AAAAeTB3BgkqhkiG9w0BBwagajBoAgEAMGMGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMq031hJ8lSv5KXJY8AgEQgDa6rj4TGmFM4Q1U5gTLI57S0yJPQ85qohYKcZ41c1GiGyOOZYXLJ/iKEydu/h7udYnijKZykXI=
+        MY_COGNITO_POLL_APP_CLIENT_SECRET: AQICAHifTfevelWnPyDfe3rrWeUpP15m6kUdEMTbV/EwqQL7YwFVLfKe2RgMzSpU/v+m7BPsAAAAljCBkwYJKoZIhvcNAQcGoIGFMIGCAgEAMH0GCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMiqdFv84VilnCktUwAgEQgFB0ghQkUT1UERf6lE1kMmjDjO515eX111sP0WQ6rZjCcBybnqd4zwymOQ1uD8bFWR+dcZwALZ1pkgb1UNgOKsLCnvYarqRBWuYlTr+kJ/jMQw==   
+      
+Resources:
+  CreateUserFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: SamUserApiCognito
+      Handler: com.studies.aws.sam.handler.CreateUserHandler::handleRequest         
+      Events:
+        CreateUser:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /users
+            Method: post
+  ConfirmUserFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: SamUserApiCognito
+      Handler: com.studies.aws.sam.handler.ConfirmUserHandler::handleRequest       
+      Events:
+        ConfirmUser:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /confirm
+            Method: post
+  LoginUserFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: SamUserApiCognito
+      Handler: com.studies.aws.sam.handler.LoginUserHandler::handleRequest       
+      Events:
+        ConfirmUser:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /login
+            Method: post            
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  SamUserApi:
+    Description: "API Gateway endpoint URL for Prod stage for SamUserApi function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/users/"
+  CreateUserFunction:
+    Description: "SamUserApi Lambda Function ARN"
+    Value: !GetAtt CreateUserFunction.Arn
+  CreateUserFunctionIamRole:
+    Description: "Implicit IAM Role created for CreateUserFunction function"
+    Value: !GetAtt CreateUserFunctionRole.Arn
