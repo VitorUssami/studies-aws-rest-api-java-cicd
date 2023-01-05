@@ -17,7 +17,7 @@ Globals:
       Variables:
         MY_COGNITO_POLL_APP_CLIENT_ID: AQICAHifTfevelWnPyDfe3rrWeUpP15m6kUdEMTbV/EwqQL7YwGfzjJn1geCltUT3StlNZ76AAAAeTB3BgkqhkiG9w0BBwagajBoAgEAMGMGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMq031hJ8lSv5KXJY8AgEQgDa6rj4TGmFM4Q1U5gTLI57S0yJPQ85qohYKcZ41c1GiGyOOZYXLJ/iKEydu/h7udYnijKZykXI=
         MY_COGNITO_POLL_APP_CLIENT_SECRET: AQICAHifTfevelWnPyDfe3rrWeUpP15m6kUdEMTbV/EwqQL7YwFVLfKe2RgMzSpU/v+m7BPsAAAAljCBkwYJKoZIhvcNAQcGoIGFMIGCAgEAMH0GCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMiqdFv84VilnCktUwAgEQgFB0ghQkUT1UERf6lE1kMmjDjO515eX111sP0WQ6rZjCcBybnqd4zwymOQ1uD8bFWR+dcZwALZ1pkgb1UNgOKsLCnvYarqRBWuYlTr+kJ/jMQw==   
-      
+        MY_COGNITO_POLL_ID: AQICAHifTfevelWnPyDfe3rrWeUpP15m6kUdEMTbV/EwqQL7YwGBqICZPoGoGJIpU15tx52IAAAAcjBwBgkqhkiG9w0BBwagYzBhAgEAMFwGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMocNO1hA3Z/AmK+POAgEQgC8BIk3k7zSAxBVF3L0AoNk/xoggzvXmBUINjkU06UKr4zF0F2Sijmg6bZFKT/3xtA==
 Resources:
   CreateUserFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -51,7 +51,25 @@ Resources:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /login
-            Method: post            
+            Method: post  
+  AddUserToGroupFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: SamUserApiCognito
+      Handler: com.studies.aws.sam.handler.AddUserToGroupHandler::handleRequest       
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - 'cognito-idp:AdminAddUserToGroup'
+              Resource: "arn:aws:cognito-idp:us-east-1:423042476254:userpool/us-east-1_ADVwJvZRZ"   
+      Events:
+        AddUserToGroup:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /users/{userName}/add-to-group
+            Method: post           
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
