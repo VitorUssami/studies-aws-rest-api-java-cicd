@@ -21,6 +21,8 @@ import software.amazon.awssdk.services.cognitoidentityprovider.model.AuthFlowTyp
 import software.amazon.awssdk.services.cognitoidentityprovider.model.AuthenticationResultType;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.ConfirmSignUpRequest;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.ConfirmSignUpResponse;
+import software.amazon.awssdk.services.cognitoidentityprovider.model.GetUserRequest;
+import software.amazon.awssdk.services.cognitoidentityprovider.model.GetUserResponse;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.InitiateAuthRequest;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.InitiateAuthResponse;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.SignUpRequest;
@@ -148,6 +150,27 @@ public class CognitoUserService {
         JsonObject response = new JsonObject();
         response.addProperty("isSuccessful", groupResponse.sdkHttpResponse().isSuccessful());
         response.addProperty("statusCode", groupResponse.sdkHttpResponse().statusCode());
+        
+        return response;
+    }
+    
+    public JsonObject getUser(String accessToken) {
+        
+        GetUserRequest userRequest = GetUserRequest.builder().accessToken(accessToken).build();
+        
+        GetUserResponse userResponse = cognitoIdentityProviderClient.getUser(userRequest);
+        
+        JsonObject response = new JsonObject();
+        response.addProperty("isSuccessful", userResponse.sdkHttpResponse().isSuccessful());
+        response.addProperty("statusCode", userResponse.sdkHttpResponse().statusCode());
+        
+        JsonObject userAttrs = new JsonObject();
+        List<AttributeType> userAttributes = userResponse.userAttributes();
+        userAttributes.stream().forEach(attr -> {
+            userAttrs.addProperty(attr.name(), attr.value());
+        });
+        
+        response.add("user", userAttrs);
         
         return response;
     }
