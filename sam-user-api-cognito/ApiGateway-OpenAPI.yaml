@@ -1,6 +1,6 @@
 openapi: "3.0.1"
 info:
-  title: "SamUserApiStack"
+  title: "SamUserApi"
   version: "1.0"
 servers:
 - url: "https://6uhrx50lpl.execute-api.us-east-1.amazonaws.com/{basePath}"
@@ -12,14 +12,14 @@ paths:
     post:
       x-amazon-apigateway-integration:
         httpMethod: "POST"
-        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:423042476254:function:SamUserApiStack-CreateUserFunction-2NQCUEeJAdLm/invocations"
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:423042476254:function:SamUserApi-CreateUserFunction-2NQCUEeJAdLm/invocations"
         passthroughBehavior: "when_no_match"
         type: "aws_proxy"
   /login:
     post:
       x-amazon-apigateway-integration:
         httpMethod: "POST"
-        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:423042476254:function:SamUserApiStack-LoginUserFunction-xmu27oXlxtos/invocations"
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:423042476254:function:SamUserApi-LoginUserFunction-xmu27oXlxtos/invocations"
         passthroughBehavior: "when_no_match"
         type: "aws_proxy"
   /users/me:
@@ -36,14 +36,14 @@ paths:
         \ headers"
       x-amazon-apigateway-integration:
         httpMethod: "POST"
-        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:423042476254:function:SamUserApiStack-GetUserHandlerFunction-GaOgKd5SawJ4/invocations"
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:423042476254:function:SamUserApi-GetUserHandlerFunction-GaOgKd5SawJ4/invocations"
         passthroughBehavior: "when_no_match"
         type: "aws_proxy"
   /confirm:
     post:
       x-amazon-apigateway-integration:
         httpMethod: "POST"
-        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:423042476254:function:SamUserApiStack-ConfirmUserFunction-pBQKqWpCzrHH/invocations"
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:423042476254:function:SamUserApi-ConfirmUserFunction-pBQKqWpCzrHH/invocations"
         passthroughBehavior: "when_no_match"
         type: "aws_proxy"
   /users/{userName}/add-to-group:
@@ -56,7 +56,7 @@ paths:
           type: "string"
       x-amazon-apigateway-integration:
         httpMethod: "POST"
-        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:423042476254:function:SamUserApiStack-AddUserToGroupFunction-QS9OFiz58gZW/invocations"
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:423042476254:function:SamUserApi-AddUserToGroupFunction-QS9OFiz58gZW/invocations"
         passthroughBehavior: "when_no_match"
         type: "aws_proxy"
 components:
