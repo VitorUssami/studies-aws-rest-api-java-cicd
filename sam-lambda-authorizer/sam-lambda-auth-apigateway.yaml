@@ -1,0 +1,48 @@
+openapi: "3.0.1"
+info:
+  title: "sam-lambda-auth"
+  version: "1.0"
+servers:
+- url: "https://9xaktd13zc.execute-api.us-east-1.amazonaws.com/{basePath}"
+  variables:
+    basePath:
+      default: "/Prod"
+paths:
+  /users/{userName}:
+    get:
+      parameters:
+      - name: "userName"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "Authorization"
+        in: "header"
+        required: true
+        schema:
+          type: "string"
+      security:
+      - SamLambdaUserAuthorizer: []
+      x-amazon-apigateway-request-validator: "Validate query string parameters and\
+        \ headers"
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:423042476254:function:sam-lambda-auth-GetUserByUsernameHandlerFunction-Wb376E8dJvbm/invocations"
+        passthroughBehavior: "when_no_match"
+        type: "aws_proxy"
+components:
+  securitySchemes:
+    SamLambdaUserAuthorizer:
+      type: "apiKey"
+      name: "Authorization"
+      in: "header"
+      x-amazon-apigateway-authtype: "custom"
+      x-amazon-apigateway-authorizer:
+        authorizerUri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:423042476254:function:sam-lambda-auth-LambdaAuthorizerFunction-Ivzmz9d5xqiW/invocations"
+        authorizerResultTtlInSeconds: 0
+        identitySource: "method.request.header.Authorization"
+        type: "request"
+x-amazon-apigateway-request-validators:
+  Validate query string parameters and headers:
+    validateRequestParameters: true
+    validateRequestBody: false
