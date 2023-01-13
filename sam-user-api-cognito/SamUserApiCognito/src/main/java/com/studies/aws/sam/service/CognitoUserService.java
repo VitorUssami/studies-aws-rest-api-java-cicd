@@ -11,6 +11,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import com.google.gson.JsonObject;
+import com.studies.aws.sam.shared.Constants;
 
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
@@ -74,10 +75,10 @@ public class CognitoUserService {
         SignUpResponse response = cognitoIdentityProviderClient.signUp(signUpRequst);
         
         JsonObject createUserResult = new JsonObject();
-        createUserResult.addProperty("isSuccessful", response.sdkHttpResponse().isSuccessful());
-        createUserResult.addProperty("statusCode", response.sdkHttpResponse().statusCode());
-        createUserResult.addProperty("cognitoUserId", response.userSub());
-        createUserResult.addProperty("isConfirmed", response.userConfirmed());
+        createUserResult.addProperty(Constants.IS_SUCCESSFUL, response.sdkHttpResponse().isSuccessful());
+        createUserResult.addProperty(Constants.STATUS_CODE, response.sdkHttpResponse().statusCode());
+        createUserResult.addProperty(Constants.COGNITO_USER_ID, response.userSub());
+        createUserResult.addProperty(Constants.IS_CONFIRMED, response.userConfirmed());
         
         return createUserResult;
     }
