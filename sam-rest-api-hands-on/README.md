@@ -1,4 +1,4 @@
-# [Studies][AWS] First AWS SAM CLI app
+# [Studies][AWS] First AWS SAM CLI app 
 
 <p style="float:left">
     <img src="https://img.shields.io/badge/Amazon%20AWS-232F3E?style=plastic&logo=Amazon%20AWS&logoColor=white" />
