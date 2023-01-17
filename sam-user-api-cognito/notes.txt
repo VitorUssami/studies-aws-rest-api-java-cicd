@@ -1,0 +1,64 @@
+studies-aws-rest-api-java-cicd
+--
+Cognito user pool:
+	sam-user-api-cognito-pool
+	
+	App client of the pool:
+		sam-user-api-cognito-pool-client
+		
+	
+
+-----
+- Create encryption key
+    - using aws console, go to key management service (KMS) and create a new 'Customer managed key', symetric. 
+
+- encrypt an lamdba environment variable
+    - can be done by using aws console.
+        - need to check 'Enable helpers for encryption in transit' option
+        - once encrypted this value canbe used ONLY for the lambda. Cannot be shared across multiples lambdas
+    - can be done by using aws client
+        - steps:
+            - create a file to put the value to be encrypted
+            - >  aws kms encrypt --key-id {{KMS-KEY-ID}} --plaintext file://{file-path} 
+            - 'CipherTextBlob' is the encrypted value
+        - can be shared across multiples lambdas     
+
+
+- ao fazer o deploy via sam deploy a chave kms nao esta configurada corretamente. Caso de erro de kms decrypt encrypt tem q ir la na kms e adicionar as lambdas como key users
+
+- App client (clientId and clientSecret)
+    - On cognito aws console, on the user pool create new "App Client"
+
+
+
+
+-----
+Post 
+    Create	
+        {
+            "email": "",
+            "password": "Test1234",
+            "firstName": "Tes",
+            "lastName": "t"
+        }	
+
+    Confirm
+        {
+            "email": "wihojed268@dewareff.com",
+            "code": "559486"
+        }
+
+    Login
+        {
+            "email": "wihojed268@dewareff.com",
+            "password": "Test1234"
+        }	    
+        
+    /users/me
+curl --location --request GET 'https://6uhrx50lpl.execute-api.us-east-1.amazonaws.com/Prod/users/me' \
+--header 'Authorization: eyJraWQiOiJNaXVld0RTQWU3YWtUUCs1c2RqVzhCTzFqK1FJQVM5dGtnbHc0UEsyTlwvVT0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIxOGQ5OWUwMC1kZjg5LTQ2MmYtODEzOS1lOTMzZDc4NjVjNWEiLCJjb2duaXRvOmdyb3VwcyI6WyJTYW1Vc2VyQVBJVGVzdEdyb3VwIl0sImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJjb2duaXRvOnByZWZlcnJlZF9yb2xlIjoiYXJuOmF3czppYW06OjQyMzA0MjQ3NjI1NDpyb2xlXC9TYW1Vc2VyQVBJLUR5bmFtb0RiQWRtaW4tcm9sZSIsImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbVwvdXMtZWFzdC0xX0FEVndKdlpSWiIsImNvZ25pdG86dXNlcm5hbWUiOiIxOGQ5OWUwMC1kZjg5LTQ2MmYtODEzOS1lOTMzZDc4NjVjNWEiLCJjdXN0b206dXNlcklkIjoiNzM3MWU0NGYtOTQ4YS00YzkxLTlmMzUtNjgwMzE2NzU3ZTBjIiwib3JpZ2luX2p0aSI6ImU3NDVhMTg4LTJlMmUtNGM5OS1hYmQ5LTcxNWFhNGZmZGJlMiIsImNvZ25pdG86cm9sZXMiOlsiYXJuOmF3czppYW06OjQyMzA0MjQ3NjI1NDpyb2xlXC9TYW1Vc2VyQVBJLUR5bmFtb0RiQWRtaW4tcm9sZSJdLCJhdWQiOiIzM2VjYjZ2a2hzMDhkcWE0dnNjbTRqOTM5ciIsImV2ZW50X2lkIjoiM2ExOGMzMWQtMzcyZC00YThiLTg2MTUtZmIyZmIyYjg1MjU3IiwidG9rZW5fdXNlIjoiaWQiLCJhdXRoX3RpbWUiOjE2NzI5NjU1MTcsIm5hbWUiOiJUZXMgdCIsImV4cCI6MTY3Mjk2OTExNiwiaWF0IjoxNjcyOTY1NTE3LCJqdGkiOiJmNmVjODZjZC1mMWFmLTRlMjItODgzOS0xNjM5NzAxNWEyMTYiLCJlbWFpbCI6IndpaG9qZWQyNjhAZGV3YXJlZmYuY29tIn0.FWaYubf-DeHGiRwig4ZrdyGaIwgZlo-LCnmEjChweuj7fnSbXL9ROWYpw_m2O_RnO7Nk7wn8BiTX1zkIRYW0-0BQA7upgZ-4m8J4-wtTfi-L5aX9GZjaaKPp43UiuWMrRPZE4KI5b2vJfZ-5DsKWJhcgPjIlTEe_h_WEn_Vg5mLu-91qeByeIl_sTqL-oWe_ZexVnzMWNYGNUNb43o9mjwEHNftYvQHkOpV4tfR4Q0ecRmX9QKrzYJfh6rB-EdgbvzqsvkST-TUW-iggduR3XVC5MVfYQaPBPuR0YNSrGolyde7MB3hKDaIsJcqJMiixU3VjKywjEsKWGz1PU9Ewhg' \
+--header 'accessToken: eyJraWQiOiJtN082XC9QVk9nTVNDYXc2YnBkK0NJc3F5a0xKXC83UVlMajV3UWtwRjZCOU09IiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiIxOGQ5OWUwMC1kZjg5LTQ2MmYtODEzOS1lOTMzZDc4NjVjNWEiLCJjb2duaXRvOmdyb3VwcyI6WyJTYW1Vc2VyQVBJVGVzdEdyb3VwIl0sImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbVwvdXMtZWFzdC0xX0FEVndKdlpSWiIsImNsaWVudF9pZCI6IjMzZWNiNnZraHMwOGRxYTR2c2NtNGo5MzlyIiwib3JpZ2luX2p0aSI6ImU3NDVhMTg4LTJlMmUtNGM5OS1hYmQ5LTcxNWFhNGZmZGJlMiIsImV2ZW50X2lkIjoiM2ExOGMzMWQtMzcyZC00YThiLTg2MTUtZmIyZmIyYjg1MjU3IiwidG9rZW5fdXNlIjoiYWNjZXNzIiwic2NvcGUiOiJhd3MuY29nbml0by5zaWduaW4udXNlci5hZG1pbiIsImF1dGhfdGltZSI6MTY3Mjk2NTUxNywiZXhwIjoxNjcyOTY5MTE2LCJpYXQiOjE2NzI5NjU1MTcsImp0aSI6ImM0OWZkOGJhLTdlMGUtNDAzMi1iMzUxLWRiNjA0YTExMjBkNiIsInVzZXJuYW1lIjoiMThkOTllMDAtZGY4OS00NjJmLTgxMzktZTkzM2Q3ODY1YzVhIn0.XwDtlf19ZIxZjhkbux4L7twp4rRvMcw3BRNh4uP8N24oLrIfWplPjvzDNuvgSSlwLmNRrbbreWpCpOWak4P8GqYsl3Tc87YnLzQFtfako3kj_elX5q682dR_q4vRzJZPudw2IytuRsBmFdvvXtbCX3dQLLe5y_z1YXN6q1AY6rwgX-ed05YmNmWSL0xTu3NUj5UyYkx9Gz71U70VtUqT52JzLcDUYCL-QWtfK5jZy5I-KE1qnBqWIqTmaWLiBaKH8MHN6Ns9F-x3Oe4pDEJoo8QBVssfMhv2K8R9lZu38PKrVUmL3v1Ikaa-fbd9EJ3YHPwoAffvteEFbZXofulRqg'
+
+
+
+SamUserAPITestGroup
